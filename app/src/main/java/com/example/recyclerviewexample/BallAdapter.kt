@@ -1,5 +1,6 @@
 package com.example.recyclerviewexample
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class BallAdapter(val ballList: List<Balls>) : RecyclerView.Adapter<BallAdapter.ViewHolder>() {
-
+    interface ItemCLickListener{
+        fun toEdit(Name:String)
+    }
+    private var itemCLickListener: ItemCLickListener? = null
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val ballImage: ImageView = view.findViewById(R.id.imageView)
         val ballName: TextView = view.findViewById(R.id.textView)
@@ -19,11 +23,14 @@ class BallAdapter(val ballList: List<Balls>) : RecyclerView.Adapter<BallAdapter.
         val view = LayoutInflater.from(parent.context).inflate(R.layout.my_layout, parent, false)
         val viewHolder = ViewHolder(view)
         viewHolder.itemView.setOnClickListener {  //onClick
-            Toast.makeText(
+
+            /*Toast.makeText(
                 parent.context,
                 ballList[viewHolder.adapterPosition].name,
                 Toast.LENGTH_SHORT
-            ).show()
+            ).show()*/
+            itemCLickListener?.toEdit(ballList[viewHolder.adapterPosition].name)
+
         }
         return viewHolder
     }
@@ -39,4 +46,9 @@ class BallAdapter(val ballList: List<Balls>) : RecyclerView.Adapter<BallAdapter.
     override fun getItemCount(): Int {
         return ballList.size
     }
+
+    fun setToEditCLickListener(listener: ItemCLickListener){
+        itemCLickListener = listener
+    }
+
 }
